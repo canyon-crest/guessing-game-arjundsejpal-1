@@ -39,10 +39,22 @@ function makeGuess(){
         resetGame();
     }
     else if (guess < answer){
-        msg.textContent = "Too low, try again";
+        if (Math.abs(guess-answer) <= 2){
+            msg.textContent = "Too low, try again. You were hot.";
+    }   else if (Math.abs(guess-answer) <= 5){
+            msg.textContent = "Too low, try again. You were warm."
+    }   else if (Math.abs(guess-answer) > 5){
+            msg.textContent = "Too low, try again. You were cold."
     }
+    }   
     else{
-        msg.textContent = "Too high, try again";
+        if (Math.abs(guess-answer) <= 2){
+            msg.textContent = "Too high, try again. You were hot.";
+    }   else if (Math.abs(guess-answer) <= 5){
+            msg.textContent = "Too high, try again. You were warm."
+    }   else if (Math.abs(guess-answer) > 5){
+            msg.textContent = "Too high, try again. You were cold."
+    }
     }
 }
 
@@ -72,5 +84,3 @@ function resetGame(){
     m.disabled = false;
     h.disabled = false;
 }
-
-
