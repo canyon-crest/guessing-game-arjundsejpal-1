@@ -7,6 +7,7 @@ let range = 0;
 let startTime = 0;
 const scores = [];
 const times = [];
+time();
 setInterval(time, 1000);
 
 document.getElementById("playBtn").addEventListener
