@@ -2,14 +2,20 @@
 //let name = prompt('Please enter your name here:');
 let answer = 0;
 let guessCount = 0;
+let range = 0;
 const scores = [];
 
 document.getElementById("playBtn").addEventListener
 ("click", play);
 document.getElementById("guessBtn").addEventListener("click", makeGuess);
+document.getElementById("giveUpBtn").addEventListener("click", giveUp);
+
+function giveUp(){
+    resetGame();
+    updateScore(range);
+}
 
 function play(){
-    let range = 0;
     let levels = document.getElementsByName("level");
     for(let i=0; i<levels.length; i++){
         if(levels[i].checked){
