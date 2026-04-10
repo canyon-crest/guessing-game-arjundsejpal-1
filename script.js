@@ -1,6 +1,6 @@
 // add javascript here
-let name = prompt('Please enter your name here:');
-name = name[0].toUpperCase() + name.slice(1).toLowerCase()
+let name = prompt('Please enter your name here:') || 'Player';
+name = name[0].toUpperCase() + name.slice(1).toLowerCase();
 let answer = 0;
 let guessCount = 0;
 let range = 0;
@@ -14,6 +14,11 @@ document.getElementById("playBtn").addEventListener
 ("click", play);
 document.getElementById("guessBtn").addEventListener("click", makeGuess);
 document.getElementById("giveUpBtn").addEventListener("click", giveUp);
+document.getElementById("guess").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        makeGuess();
+    }
+});
 
 function giveUp(){
     updateTimers(new Date().getTime())
@@ -30,7 +35,7 @@ function play(){
         }
         levels[i].disabled = true;
     }
-    document.getElementById("msg").textContent = "Guess a number 1-" + range + " " + name; 
+    setMsg("Guess a number 1-" + range + " " + name); 
     answer = Math.floor(Math.random()*range) +1; 
     guessCount = 0;
 
@@ -42,32 +47,35 @@ function play(){
 function makeGuess(){
     let guess = parseInt(document.getElementById("guess").value);
     if(isNaN(guess)){
-        msg.textContent = "Please enter a valid number";
+        setMsg("Please enter a valid number");
+        return;
+    } else if (guess < 1 || guess > range){
+        setMsg("The number you entered is outside the range");
         return;
     }
     guessCount++; 
     if (guess == answer){
-        msg.textContent = "Correct " + name + "! It took " + guessCount + " tries.";
+        setMsg("Correct " + name + "! It took " + guessCount + " tries.", true);
         updateScore(guessCount);
         updateTimers(new Date().getTime())
         resetGame();
     }
     else if (guess < answer){
         if (Math.abs(guess-answer) <= 2){
-            msg.textContent = "Too low, try again " + name + ". You were hot.";
+            setMsg("Too low, try again " + name + ". You were hot.");
     }   else if (Math.abs(guess-answer) <= 5){
-            msg.textContent = "Too low, try again " + name + ". You were warm.";
+            setMsg("Too low, try again " + name + ". You were warm.");
     }   else if (Math.abs(guess-answer) > 5){
-            msg.textContent = "Too low, try again " + name + ". You were cold.";
+            setMsg("Too low, try again " + name + ". You were cold.");
     }
     }   
     else{
         if (Math.abs(guess-answer) <= 2){
-            msg.textContent = "Too high, try again " + name + ". You were hot.";
+            setMsg("Too high, try again " + name + ". You were hot.");
     }   else if (Math.abs(guess-answer) <= 5){
-            msg.textContent = "Too high, try again " + name + ". You were warm.";
+            setMsg("Too high, try again " + name + ". You were warm.");
     }   else if (Math.abs(guess-answer) > 5){
-            msg.textContent = "Too high, try again " + name + ". You were cold.";
+            setMsg("Too high, try again " + name + ". You were cold.");
     }
     }
 }
@@ -80,7 +88,7 @@ function updateScore(score){
         sum += scores[i]
     }
     avgScore.textContent = "Average score: " + (sum/scores.length).toFixed(1);
-    scores.sort(function(a,b){return a-b}); // sort score increasing
+    scores.sort(function(a,b){return a-b});
     let lb = document.getElementsByName("leaderboard");
     for(let i = 0; i < lb.length; i++){
         if (i < scores.length){
@@ -127,4 +135,14 @@ function updateTimers(endMs){
     }
     avgTime.textContent = "Average time: " + (timeSum/times.length).toFixed(1) + " ms";
     fastest.textContent = "Fastest time: " + times[0].toFixed(1) + " ms";
+}
+
+function setMsg(text, celebrate = false) {
+    msg.classList.remove('msg-animate', 'win-celebrate');
+    void msg.offsetWidth;
+    msg.textContent = text;
+    msg.classList.add('msg-animate');
+    if (celebrate) {
+        msg.classList.add('win-celebrate');
+    }
 }
