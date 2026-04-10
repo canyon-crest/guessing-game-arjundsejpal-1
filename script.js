@@ -4,7 +4,10 @@ name = name[0].toUpperCase() + name.slice(1).toLowerCase()
 let answer = 0;
 let guessCount = 0;
 let range = 0;
+let startTime = 0;
 const scores = [];
+const times = [];
+setInterval(time, 1000);
 
 document.getElementById("playBtn").addEventListener
 ("click", play);
@@ -12,12 +15,14 @@ document.getElementById("guessBtn").addEventListener("click", makeGuess);
 document.getElementById("giveUpBtn").addEventListener("click", giveUp);
 
 function giveUp(){
+    updateTimers(new Date().getTime())
     resetGame();
     updateScore(range);
 }
 
 function play(){
     let levels = document.getElementsByName("level");
+    startTime = new Date().getTime();
     for(let i=0; i<levels.length; i++){
         if(levels[i].checked){
             range = parseInt(levels[i].value);
@@ -43,6 +48,7 @@ function makeGuess(){
     if (guess == answer){
         msg.textContent = "Correct " + name + "! It took " + guessCount + " tries.";
         updateScore(guessCount);
+        updateTimers(new Date().getTime())
         resetGame();
     }
     else if (guess < answer){
@@ -90,4 +96,34 @@ function resetGame(){
     e.disabled = false;
     m.disabled = false;
     h.disabled = false;
+}
+
+function time(){
+    let d = new Date();
+    let suffix = '';
+    if (d.getDate() == 11 || d.getDate() == 12 || d.getDate() == 13){
+        suffix = 'th';
+    } else if (d.getDate() % 10 == 1){
+        suffix = 'st';
+    } else if (d.getDate() % 10 == 2){
+        suffix = 'nd';
+    } else if (d.getDate() % 10 == 3){
+        suffix = 'rd';
+    } else{
+        suffix = 'th'
+    }
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    date.textContent = months[d.getMonth()] + " " + d.getDate() + suffix + ', ' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+}
+
+function updateTimers(endMs){
+    let elapsedTime = endMs - startTime;
+    let timeSum = 0;
+    times.push(elapsedTime);
+    times.sort(function(a,b){return a-b});
+    for(let i = 0; i<times.length; i++){
+        timeSum += times[i];
+    }
+    avgTime.textContent = "Average time: " + (timeSum/times.length).toFixed(1) + " ms";
+    fastest.textContent = "Fastest time: " + times[0].toFixed(1) + " ms";
 }
