@@ -1,5 +1,6 @@
 // add javascript here
-//let name = prompt('Please enter your name here:');
+let name = prompt('Please enter your name here:');
+name = name[0].toUpperCase() + name.slice(1).toLowerCase()
 let answer = 0;
 let guessCount = 0;
 let range = 0;
@@ -40,26 +41,26 @@ function makeGuess(){
     }
     guessCount++; 
     if (guess == answer){
-        msg.textContent = "Correct! It took " + guessCount + " tries.";
+        msg.textContent = "Correct " + name + "! It took " + guessCount + " tries.";
         updateScore(guessCount);
         resetGame();
     }
     else if (guess < answer){
         if (Math.abs(guess-answer) <= 2){
-            msg.textContent = "Too low, try again. You were hot.";
+            msg.textContent = "Too low, try again " + name + ". You were hot.";
     }   else if (Math.abs(guess-answer) <= 5){
-            msg.textContent = "Too low, try again. You were warm."
+            msg.textContent = "Too low, try again " + name + ". You were warm.";
     }   else if (Math.abs(guess-answer) > 5){
-            msg.textContent = "Too low, try again. You were cold."
+            msg.textContent = "Too low, try again " + name + ". You were cold.";
     }
     }   
     else{
         if (Math.abs(guess-answer) <= 2){
-            msg.textContent = "Too high, try again. You were hot.";
+            msg.textContent = "Too high, try again " + name + ". You were hot.";
     }   else if (Math.abs(guess-answer) <= 5){
-            msg.textContent = "Too high, try again. You were warm."
+            msg.textContent = "Too high, try again " + name + ". You were warm.";
     }   else if (Math.abs(guess-answer) > 5){
-            msg.textContent = "Too high, try again. You were cold."
+            msg.textContent = "Too high, try again " + name + ". You were cold.";
     }
     }
 }
